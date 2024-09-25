@@ -1,0 +1,80 @@
+import requests
+import discord
+import random
+import os
+from discord.ext import commands
+
+intents = discord.Intents.default()
+# Activar el privilegio de lectura de mensajes
+intents.message_content = True
+# Crear un bot en la variable cliente y transferirle los privilegios
+client = discord.Client(intents=intents)
+INFO_TEC=["Reduce el desperdicio alimentario. Cuando tiramos comida a la basura estamos desperdiciando también la energía y el agua empleadas para la producción, el transporte, el almacenamiento y la gestión de residuos.",
+          "Separa y recicla. Separa los envases de plástico, el papel y cartón, el vidrio, la materia orgánica y los restos, para depositarlos en el contenedor correcto.",
+          "Evita el uso de bolsas de plástico. Si llevas tu propia bolsa de tela o rafia a la compra, evitas que te den una nueva cada vez",
+          "Elabora compostaje doméstico. Utiliza tus residuos orgánicos para crear tu propio compost y generar abono natural.",
+          "Reduce el uso de productos desechables. Utiliza productos que sean reutilizables o recargables para darles más vidas."]
+
+I1="Contaminación del suelo y del agua"
+I2="Contaminación del aire"
+I3="Generación de gases de efecto invernadero"
+I4="Desperdicio de recursos"
+I5="Destrucción del paisaje"
+I6="Protección del medio ambiente"
+I7="Menor emisión de gases de efecto invernadero"
+I8="Menos gasto en productos de un solo uso"
+I9="Fomento de hábitos sostenibles y responsables"
+
+INFO_BN=[I6,I7,I8,I9]
+INFO_Cons=[I1,I2,I3,I4,I5]
+
+@client.event
+async def on_ready():
+    print(f'Hemos iniciado sesión como {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.content.startswith('$hello'):
+        await message.channel.send("Hi!")
+
+    elif message.content.startswith("$Info"):
+        await message.channel.send("Claro!! de que quieres saber?, Escribe alguno de los siguientes comandos")
+        await message.channel.send("What?= En que consiste")
+        await message.channel.send("Cons=Consecuencias de los residuos de casa")
+        await message.channel.send("BN=Benefficios de reducir los residuos de casa")
+        await message.channel.send("TR=Consejos de reduccion")
+        await message.channel.send("Imagenes=Imagenes relacionadas al tema")
+
+    elif message.content.startswith('$What?'):
+        await message.channel.send("Reducir los residuos generados en casa implica adoptar prácticas que minimicen la cantidad de desechos producidos.")
+
+    elif message.content.startswith('$Cons'):
+        await message.channel.send("Los residuos generados en casa, si no son gestionados adecuadamente, pueden tener una serie de consecuencias negativas, tanto para el medio ambiente como para la salud pública y el bienestar social.")
+        await message.channel.send("Ejemplo:")
+        b=random.choice(INFO_Cons)
+        await message.channel.send(b)
+
+    elif message.content.startswith('$BN'):
+        await message.channel.send("Reducir los residuos generados en casa tiene numerosos beneficios que afectan positivamente el medio ambiente, la economía, la salud y el bienestar social.")
+        c=random.choice(INFO_BN)
+        await message.channel.send("Ejemplo:")
+        await message.channel.send(c)
+
+    elif message.content.startswith('$TR'):
+        a=random.choice(INFO_TEC)
+        await message.channel.send(a)
+
+    elif message.content.startswith('$Imagenes'):
+        Img=random.choice(os.listdir('Actividades_M2L2/Images'))
+        with open(f'Actividades_M2L2/Images/{Img}', 'rb') as f:
+            picture = discord.File(f)
+        await message.channel.send(file=picture)
+
+    elif message.content.startswith('$bye'):
+        await message.channel.send("Hasta pronto")
+    else:
+        await message.channel.send(message.content)
+    
+client.run("Token")
